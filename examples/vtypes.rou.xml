@@ -1,0 +1,4 @@
+<routes>
+  <vType id="car" vClass="passenger" length="4.5" accel="2.6" decel="4.5" sigma="0.5"/>
+  <vType id="truck" vClass="truck" length="8.0" accel="1.2" decel="4.0" sigma="0.5"/>
+</routes>
