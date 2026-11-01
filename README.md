@@ -1,5 +1,9 @@
 # vision-travel-time-sensing
 
+<!-- banner -->
+<p align="center"><img src="docs/assets/banner.svg" alt="vision-travel-time-sensing" width="860"></p>
+
+
 **Edge travel times from sparse multi-camera re-identification: graph-gated association, network tomography to unobserved edges, camera placement, and the sensitivity of a spanner bound to estimation error.**
 
 Time-varying routing and spanner constructions assume edge travel times `tau_e(t)` that nobody
