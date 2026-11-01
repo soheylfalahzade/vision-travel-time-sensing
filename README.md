@@ -112,6 +112,32 @@ eliminate violations: a bound certified on estimated weights is not guaranteed u
 
 ![results](docs/results/results.png)
 
+## Replication: 10 seeds and a second topology
+
+The main experiment (three seeds, one 5 x 5 grid) was repeated with **10 traffic seeds** on the same grid and on a
+different one (`examples/grid7x4.net.xml`: 7 x 4 junctions, 180 m x 120 m links, 28 junctions, 67 % camera-corridor
+coverage). Values are means over seeds with a percentile bootstrap 95% interval over seeds
+(`docs/results/seeds10_*.json`; regenerate with `vtts-eval --net examples/grid7x4.net.xml --seeds 10`).
+
+| quantity | 5 x 5 grid | 7 x 4 grid |
+|---|---|---|
+| association precision, graph-gated | 0.881 [0.868, 0.892] | 0.897 [0.888, 0.906] |
+| association precision, appearance only | 0.564 [0.551, 0.577] | 0.633 [0.620, 0.649] |
+| association precision, time only | 0.180 [0.173, 0.187] | 0.260 [0.253, 0.268] |
+| MAPE, all edges: tomography (lambda 0.5) | 0.229 [0.225, 0.234] | 0.268 [0.259, 0.278] |
+| MAPE, all edges: global median | 0.257 [0.254, 0.261] | 0.285 [0.280, 0.291] |
+| MAPE, uncovered edges: tomography | 0.190 [0.182, 0.199] | 0.250 [0.240, 0.262] |
+| MAPE, uncovered edges: global median | 0.165 [0.161, 0.168] | 0.245 [0.239, 0.251] |
+| spanner pairs violating the bound, estimated weights | 0.011 [0.009, 0.013] | 0.009 [0.008, 0.011] |
+| spanner pairs violating the bound, free-flow weights | 0.018 [0.016, 0.021] | 0.011 [0.010, 0.012] |
+
+What replicates: graph gating raises association precision by about 0.32 (5 x 5) and 0.26 (7 x 4) over
+appearance alone, and tomography lowers the all-edge error below the global-median baseline on both grids, by
+11 % and 6 %. What does not: on uncovered edges the global median is at least as good as tomography (clearly
+better on the 5 x 5 grid, indistinguishable on the 7 x 4 grid), and estimated weights do not remove spanner-bound
+violations on either grid. Greedy coverage placement has the lowest error with 12 cameras on the 5 x 5 grid
+(0.200 against 0.221 for random) but the highest with 4 cameras on both grids.
+
 ## Claims and evidence
 
 | claim | evidence | file |
@@ -131,7 +157,7 @@ eliminate violations: a bound certified on estimated weights is not guaranteed u
   simulator; the ground truth is the mean traversal time of vehicles, the same quantity the tomography targets.
 - *External*: one grid topology with unique straight paths; real networks have route ambiguity, and the
   time-variation of congestion across slices is modest here (mean time ratio 2.4-2.7).
-- *Statistical*: three traffic seeds; ranges, not confidence intervals, are reported.
+- *Statistical*: ten traffic seeds are reported with bootstrap intervals in the replication section; the main tables use three seeds and ranges.
 
 ## Data and code availability
 

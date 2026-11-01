@@ -13,3 +13,7 @@ of at least five edges, 12% trucks. Environment: Python 3.12, `requirements-lock
 (`pip install -e ".[sumo]"`). The traffic of each seed is cached in `results/eval/traffic_seed*.npz`;
 re-running with the same SUMO and package versions reproduces the reported numbers. `make all` runs ruff,
 mypy and pytest; CI runs the same on Python 3.10-3.12.
+
+Second network: `examples/grid7x4.net.xml` was generated with
+`netgenerate --grid --grid.x-number 7 --grid.y-number 4 --grid.x-length 180 --grid.y-length 120 -j traffic_light --no-turnarounds true --default.lanenumber 1`.
+Replication: `vtts-eval --net examples/grid5.net.xml --seeds 10 --out results/grid5` and the same with the 7 x 4 grid.

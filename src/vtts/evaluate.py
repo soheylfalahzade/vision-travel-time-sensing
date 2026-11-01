@@ -160,6 +160,16 @@ def run_seed(net: Network, data: TrafficData, seed: int, k: int = 8) -> dict[str
     return res
 
 
+def bootstrap_ci(v: np.ndarray, n_boot: int = 2000, seed: int = 0) -> tuple[float, float]:
+    """Percentile bootstrap 95% interval of the mean over seeds (NaN-safe; needs >= 3 seeds)."""
+    v = v[~np.isnan(v)]
+    if len(v) < 3:
+        return float("nan"), float("nan")
+    rng = np.random.default_rng(seed)
+    means = rng.choice(v, size=(n_boot, len(v)), replace=True).mean(axis=1)
+    return float(np.quantile(means, 0.025)), float(np.quantile(means, 0.975))
+
+
 def aggregate(runs: list[dict[str, Any]]) -> dict[str, Any]:
     """Mean and range over seeds for every numeric leaf."""
     def walk(items: list[Any]) -> Any:
@@ -168,8 +178,9 @@ def aggregate(runs: list[dict[str, Any]]) -> dict[str, Any]:
             return {k: walk([i[k] for i in items]) for k in first}
         if isinstance(first, (int, float)) and not isinstance(first, bool):
             v = np.array([x for x in items if x is not None], dtype=float)
+            lo, hi = bootstrap_ci(v)
             return {"mean": float(np.nanmean(v)), "min": float(np.nanmin(v)),
-                    "max": float(np.nanmax(v))}
+                    "max": float(np.nanmax(v)), "ci95_lo": lo, "ci95_hi": hi, "n": int(len(v))}
         return first
     return walk([{k: v for k, v in r.items() if k != "seed"} for r in runs])
 

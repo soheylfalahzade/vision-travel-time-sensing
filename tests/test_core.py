@@ -96,4 +96,19 @@ def test_spanner_is_exact_on_own_weights_and_dilation_detects_mismatch():
 
 def test_aggregate_reports_mean_and_range():
     agg = aggregate([{"a": {"x": 1.0}}, {"a": {"x": 3.0}}])
-    assert agg["a"]["x"] == {"mean": 2.0, "min": 1.0, "max": 3.0}
+    x = agg["a"]["x"]
+    assert (x["mean"], x["min"], x["max"], x["n"]) == (2.0, 1.0, 3.0, 2)
+    assert x["ci95_lo"] != x["ci95_lo"]            # NaN: fewer than three seeds
+
+
+def test_bootstrap_ci_brackets_the_mean_and_needs_three_seeds():
+    import numpy as np
+
+    from vtts.evaluate import aggregate, bootstrap_ci
+
+    v = np.array([0.2, 0.25, 0.3, 0.22, 0.28])
+    lo, hi = bootstrap_ci(v)
+    assert lo <= v.mean() <= hi and hi - lo < v.max() - v.min()
+    assert np.isnan(bootstrap_ci(np.array([0.1, 0.2]))[0])
+    agg = aggregate([{"seed": i, "x": {"m": float(i)}} for i in range(5)])
+    assert agg["x"]["m"]["n"] == 5 and agg["x"]["m"]["ci95_lo"] < 2.0 < agg["x"]["m"]["ci95_hi"]
