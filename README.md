@@ -131,6 +131,11 @@ coverage). Values are means over seeds with a percentile bootstrap 95% interval 
 | spanner pairs violating the bound, estimated weights | 0.011 [0.009, 0.013] | 0.009 [0.008, 0.011] |
 | spanner pairs violating the bound, free-flow weights | 0.018 [0.016, 0.021] | 0.011 [0.010, 0.012] |
 
+<p align="center"><img src="docs/assets/replication.png" alt="Replication on two grids" width="900"></p>
+
+*Association precision, all-edge travel-time error and spanner-bound violations on both topologies
+(bars: means; whiskers: bootstrap 95% intervals over 10 seeds). Regenerate with `vtts-figures`.*
+
 What replicates: graph gating raises association precision by about 0.32 (5 x 5) and 0.26 (7 x 4) over
 appearance alone, and tomography lowers the all-edge error below the global-median baseline on both grids, by
 11 % and 6 %. What does not: on uncovered edges the global median is at least as good as tomography (clearly

@@ -21,6 +21,7 @@ dev = ["pytest>=7.4", "pytest-cov>=4.1", "ruff>=0.4", "mypy>=1.8"]
 vtts-eval = "vtts.evaluate:main"
 vtts-simulate = "vtts.simulate:main"
 vtts-gif = "vtts.viz:main"
+vtts-figures = "vtts.figures:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
